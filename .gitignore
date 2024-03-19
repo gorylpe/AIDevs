@@ -1,0 +1,5 @@
+.venv/
+.vscode/
+
+*.pyc
+AIDevs/api_key.py
