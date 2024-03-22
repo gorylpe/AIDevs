@@ -61,6 +61,16 @@ class AIDevsTasks:
 
         return result
 
+    def task_with_data(self, data: dict) -> dict:
+        task_url = f"{BASE_URL}/task/{self._token}"
+
+        result = self._request(HTTPMethod.POST, url=task_url, data=data)
+
+        if self._debug:
+            self.log("TASK", result)
+
+        return result
+
     def hint(self) -> dict:
         hint_url = f"{BASE_URL}/hint/{self._task}"
 
