@@ -3,6 +3,7 @@ import requests
 
 from enum import Enum
 from pprint import pprint
+from .api_key import BASE_URL
 
 
 class HTTPMethod(Enum):
@@ -14,8 +15,6 @@ class AIDevsTasks:
 
     class WrongRequest(Exception):
         pass
-
-    BASE_URL = "https://tasks.aidevs.pl"
 
     def __init__(self, api_key: str, task: str, debug: bool = True):
         self._api_key = api_key
@@ -45,7 +44,7 @@ class AIDevsTasks:
         return response_json
 
     def _obtain_task_token(self, task_name: str) -> str:
-        token_url = f"{AIDevsTasks.BASE_URL}/token/{task_name}"
+        token_url = f"{BASE_URL}/token/{task_name}"
         data = {"apikey": self._api_key}
 
         response = self._request(HTTPMethod.POST, url=token_url, data=json.dumps(data))
@@ -53,7 +52,7 @@ class AIDevsTasks:
         return response["token"]
 
     def task(self) -> dict:
-        task_url = f"{AIDevsTasks.BASE_URL}/task/{self._token}"
+        task_url = f"{BASE_URL}/task/{self._token}"
 
         result = self._request(HTTPMethod.GET, url=task_url)
 
@@ -63,7 +62,7 @@ class AIDevsTasks:
         return result
 
     def hint(self) -> dict:
-        hint_url = f"{AIDevsTasks.BASE_URL}/hint/{self._task}"
+        hint_url = f"{BASE_URL}/hint/{self._task}"
 
         result = self._request(HTTPMethod.GET, url=hint_url)
 
@@ -73,7 +72,7 @@ class AIDevsTasks:
         return result
 
     def send_answer(self, answer: dict) -> dict:
-        answer_url = f"{AIDevsTasks.BASE_URL}/answer/{self._token}"
+        answer_url = f"{BASE_URL}/answer/{self._token}"
 
         result = self._request(HTTPMethod.POST, url=answer_url, data=json.dumps(answer))
 

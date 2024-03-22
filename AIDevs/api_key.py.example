@@ -1,0 +1,3 @@
+API_KEY = "asd"
+OPENAI_API_KEY = "123"
+BASE_URL = "https://tasks.ai-xxx-devs.pl"
