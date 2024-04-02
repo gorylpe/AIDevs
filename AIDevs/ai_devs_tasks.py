@@ -90,3 +90,8 @@ class AIDevsTasks:
             self.log("ANSWER", result)
 
         return result
+
+    def get_file(self, url: str) -> bytes:
+        data = {"apikey": self._api_key}
+        r = requests.get(url, data=data)
+        return r.content
