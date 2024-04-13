@@ -4,6 +4,7 @@ import docker
 from docker.models.containers import Container
 from qdrant_client import QdrantClient
 import json
+from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate
 
 llm = ChatOpenAI(model="gpt-3.5-turbo", api_key=OPENAI_API_KEY)
 dev_task = AIDevsTasks(API_KEY, "search", debug=True)
@@ -42,3 +43,33 @@ else:
     print("Data already uploaded")
 
 task = dev_task.task()
+question = task["question"]
+
+search_result = qdrant_client.query("docs", question, limit=5)
+
+answer = {"answer": search_result[0].metadata["url"]}
+
+result = dev_task.send_answer(answer)
+
+# todo dodatkowe rzeczy które też mogą być podobne z tematów, LLM który sprawdza który najbardziej
+#
+# documents = "\n".join([f"{i}. {x.document}" for (i, x) in enumerate(search_result)])
+# print(documents)
+
+# prompt = ChatPromptTemplate.from_messages(
+#     [
+#         SystemMessagePromptTemplate.from_template(
+#             "Odpowiadasz tylko na podstawie podanej listy tematów.\n"
+#             'W przypadku gdy lista nie zawiera odpowiedniej informacji odpowiedz "Nie wiem".\n'
+#             "Lista tematów:\n"
+#             "{context}\n"
+#         ),
+#         (
+#             "user",
+#             'Podaj tylko numer tematu który jest najbardziej związany z pytaniem "{input}".',
+#         ),
+#     ]
+# )
+# chain = prompt | llm
+# chain_answer = chain.invoke({"input": question, "context": documents})
+# print(chain_answer.content)
