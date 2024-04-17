@@ -15,7 +15,6 @@ dev_task = AIDevsTasks(API_KEY, "ownapipro", debug=True)
 
 
 def run_test(url: str):
-    print("Starting test")
     task = dev_task.task()
     answer = {"answer": url}
     result = dev_task.send_answer(answer)
