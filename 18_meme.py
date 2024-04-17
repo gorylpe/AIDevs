@@ -1,4 +1,4 @@
-from AIDevs import AIDevsTasks, API_KEY, OPENAI_API_KEY
+from AIDevs import AIDevsTasks, API_KEY, OPENAI_API_KEY, RENDERFORM_APIKEY
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import SystemMessage, HumanMessage
@@ -10,8 +10,6 @@ dev_task = AIDevsTasks(API_KEY, "meme", debug=True)
 task = dev_task.task()
 image = task["image"]
 text = task["text"]
-
-RENDERFORM_APIKEY = "placeholder todo"
 
 headers = {
     "X-API-KEY": RENDERFORM_APIKEY,
