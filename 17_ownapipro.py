@@ -1,6 +1,7 @@
 from AIDevs import AIDevsTasks, API_KEY, OPENAI_API_KEY, NGROK_AUTH_TOKEN
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
+from langchain.schema.messages import AIMessage, HumanMessage
 from fastapi import FastAPI
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
@@ -10,7 +11,7 @@ import ngrok
 
 llm = ChatOpenAI(model="gpt-3.5-turbo", api_key=OPENAI_API_KEY)
 chain = llm | StrOutputParser()
-dev_task = AIDevsTasks(API_KEY, "ownapi", debug=True)
+dev_task = AIDevsTasks(API_KEY, "ownapipro", debug=True)
 
 
 def run_test(url: str):
@@ -35,11 +36,17 @@ class Request(BaseModel):
     question: str
 
 
+messages = []
+
+
 @app.post("/")
 def answer(request: Request):
     question = request.question
-    reply = chain.invoke(question)
+    messages.append(HumanMessage(question))
+    replyObj = llm.invoke(messages)
+    reply = replyObj.content
     print(f"{question} - {reply}")
+    messages.append(AIMessage(reply))
     return {"reply": reply}
 
 
