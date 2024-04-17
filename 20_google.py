@@ -58,6 +58,7 @@ def answer(request: Request):
     question = request.question
     human = HumanMessage(content=question)
     action_json = chain.invoke([system, human])
+    print(f"{question} - {action_json}")
     action = action_json["action"]
     details = action_json["details"]
 
@@ -73,7 +74,8 @@ def answer(request: Request):
             }
         )
         result = search.get_dict()
-    print(f"{question} - {action_json}")
+        answer = result["organic_results"][0]["link"]
+    print(f"{question} - {action_json} - {answer}")
     return {"reply": answer}
 
 
